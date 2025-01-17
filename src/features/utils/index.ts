@@ -63,6 +63,31 @@ export const getTitle = (supportedChain: SupportedChain) => {
   return chains[technology]?.chains[supportedChain]?.title
 }
 
+/**
+ * Transforms a token name according to the following rules:
+ * 1. Convert to lowercase
+ * 2. Remove all dots (.)
+ * 3. Replace plus signs (+) with %2B
+ * @example
+ * BTC.b → btcb
+ * COMP+USDC → comp%2Busdc
+ * TOKEN.A+B → tokena%2Bb
+ */
+const transformTokenName = (token: string): string => {
+  if (!token) return ""
+  return token
+    .toLowerCase() // Step 1: Convert to lowercase
+    .replace(/\./g, "") // Step 2: Remove all dots
+    .replace(/\+/g, "%2B") // Step 3: Replace plus signs with %2B
+}
+
+export const getTokenIconUrl = (token: string) => {
+  if (!token) return
+  return `https://d2f70xi62kby8n.cloudfront.net/tokens/${transformTokenName(token)}.webp?auto=compress%2Cformat`
+}
+
+export const fallbackTokenIconUrl = "/assets/icons/generic-token.svg"
+
 export const getChainId = (supportedChain: SupportedChain) => {
   const technology = chainToTechnology[supportedChain]
   if (!technology) return
@@ -108,20 +133,16 @@ export const directoryToSupportedChain = (chainInRdd: string): SupportedChain =>
       return "ETHEREUM_SEPOLIA"
     case "ethereum-mainnet-optimism-1":
       return "OPTIMISM_MAINNET"
-    case "ethereum-testnet-goerli-optimism-1":
-      return "OPTIMISM_GOERLI"
     case "ethereum-testnet-sepolia-optimism-1":
       return "OPTIMISM_SEPOLIA"
     case "ethereum-mainnet-arbitrum-1":
       return "ARBITRUM_MAINNET"
-    case "ethereum-testnet-goerli-arbitrum-1":
-      return "ARBITRUM_GOERLI"
     case "ethereum-testnet-sepolia-arbitrum-1":
       return "ARBITRUM_SEPOLIA"
     case "matic-mainnet":
       return "POLYGON_MAINNET"
-    case "matic-testnet":
-      return "POLYGON_MUMBAI"
+    case "polygon-testnet-amoy":
+      return "POLYGON_AMOY"
     case "avalanche-mainnet":
       return "AVALANCHE_MAINNET"
     case "avalanche-fuji-testnet":
@@ -132,10 +153,76 @@ export const directoryToSupportedChain = (chainInRdd: string): SupportedChain =>
       return "BNB_TESTNET"
     case "ethereum-mainnet-base-1":
       return "BASE_MAINNET"
-    case "ethereum-testnet-goerli-base-1":
-      return "BASE_GOERLI"
     case "ethereum-testnet-sepolia-base-1":
       return "BASE_SEPOLIA"
+    case "wemix-mainnet":
+      return "WEMIX_MAINNET"
+    case "wemix-testnet":
+      return "WEMIX_TESTNET"
+    case "ethereum-mainnet-kroma-1":
+      return "KROMA_MAINNET"
+    case "ethereum-testnet-sepolia-kroma-1":
+      return "KROMA_SEPOLIA"
+    case "xdai-mainnet":
+      return "GNOSIS_MAINNET"
+    case "xdai-testnet-chiado":
+      return "GNOSIS_CHIADO"
+    case "celo-mainnet":
+      return "CELO_MAINNET"
+    case "celo-testnet-alfajores":
+      return "CELO_ALFAJORES"
+    case "ethereum-testnet-sepolia-mode-1":
+      return "MODE_SEPOLIA"
+    case "ethereum-mainnet-mode-1":
+      return "MODE_MAINNET"
+    case "ethereum-mainnet-blast-1":
+      return "BLAST_MAINNET"
+    case "ethereum-testnet-sepolia-blast-1":
+      return "BLAST_SEPOLIA"
+    case "ethereum-mainnet-andromeda-1":
+      return "METIS_MAINNET"
+    case "ethereum-testnet-sepolia-andromeda-1":
+      return "METIS_SEPOLIA"
+    case "ethereum-mainnet-zksync-1":
+      return "ZKSYNC_MAINNET"
+    case "ethereum-testnet-sepolia-zksync-1":
+      return "ZKSYNC_SEPOLIA"
+    case "ethereum-mainnet-linea-1":
+      return "LINEA_MAINNET"
+    case "ethereum-testnet-sepolia-linea-1":
+      return "LINEA_SEPOLIA"
+    case "ethereum-mainnet-scroll-1":
+      return "SCROLL_MAINNET"
+    case "ethereum-testnet-sepolia-scroll-1":
+      return "SCROLL_SEPOLIA"
+    case "ethereum-testnet-sepolia-soneium-1":
+      return "SONEIUM_MINATO"
+    case "ethereum-testnet-holesky":
+      return "ETHEREUM_HOLESKY"
+    case "polkadot-mainnet-astar":
+      return "ASTAR_MAINNET"
+    case "polkadot-testnet-astar-shibuya":
+      return "ASTAR_SHIBUYA"
+    case "ethereum-testnet-sepolia-zircuit-1":
+      return "ZIRCUIT_TESTNET"
+    case "ethereum-mainnet-zircuit-1":
+      return "ZIRCUIT_MAINNET"
+    case "ethereum-mainnet-mantle-1":
+      return "MANTLE_MAINNET"
+    case "ethereum-testnet-sepolia-mantle-1":
+      return "MANTLE_SEPOLIA"
+    case "ronin-mainnet":
+      return "RONIN_MAINNET"
+    case "ronin-testnet-saigon":
+      return "RONIN_SAIGON"
+    case "bitcoin-mainnet-bsquared-1":
+      return "BSQUARED_MAINNET"
+    case "bitcoin-testnet-bsquared-1":
+      return "BSQUARED_TESTNET"
+    case "shibarium-mainnet":
+      return "SHIBARIUM_MAINNET"
+    case "shibarium-testnet-puppynet":
+      return "SHIBARIUM_PUPPYNET"
     default:
       throw Error(`Chain not found ${chainInRdd}`)
   }
@@ -149,20 +236,16 @@ export const supportedChainToChainInRdd = (supportedChain: SupportedChain): stri
       return "ethereum-testnet-sepolia"
     case "OPTIMISM_MAINNET":
       return "ethereum-mainnet-optimism-1"
-    case "OPTIMISM_GOERLI":
-      return "ethereum-testnet-goerli-optimism-1"
     case "OPTIMISM_SEPOLIA":
       return "ethereum-testnet-sepolia-optimism-1"
     case "ARBITRUM_MAINNET":
       return "ethereum-mainnet-arbitrum-1"
     case "ARBITRUM_SEPOLIA":
       return "ethereum-testnet-sepolia-arbitrum-1"
-    case "ARBITRUM_GOERLI":
-      return "ethereum-testnet-goerli-arbitrum-1"
     case "POLYGON_MAINNET":
       return "matic-mainnet"
-    case "POLYGON_MUMBAI":
-      return "matic-testnet"
+    case "POLYGON_AMOY":
+      return "polygon-testnet-amoy"
     case "AVALANCHE_MAINNET":
       return "avalanche-mainnet"
     case "AVALANCHE_FUJI":
@@ -173,10 +256,76 @@ export const supportedChainToChainInRdd = (supportedChain: SupportedChain): stri
       return "bsc-testnet"
     case "BASE_MAINNET":
       return "ethereum-mainnet-base-1"
-    case "BASE_GOERLI":
-      return "ethereum-testnet-goerli-base-1"
     case "BASE_SEPOLIA":
       return "ethereum-testnet-sepolia-base-1"
+    case "WEMIX_MAINNET":
+      return "wemix-mainnet"
+    case "WEMIX_TESTNET":
+      return "wemix-testnet"
+    case "KROMA_MAINNET":
+      return "ethereum-mainnet-kroma-1"
+    case "KROMA_SEPOLIA":
+      return "ethereum-testnet-sepolia-kroma-1"
+    case "GNOSIS_MAINNET":
+      return "xdai-mainnet"
+    case "GNOSIS_CHIADO":
+      return "xdai-testnet-chiado"
+    case "CELO_MAINNET":
+      return "celo-mainnet"
+    case "CELO_ALFAJORES":
+      return "celo-testnet-alfajores"
+    case "MODE_SEPOLIA":
+      return "ethereum-testnet-sepolia-mode-1"
+    case "MODE_MAINNET":
+      return "ethereum-mainnet-mode-1"
+    case "BLAST_MAINNET":
+      return "ethereum-mainnet-blast-1"
+    case "BLAST_SEPOLIA":
+      return "ethereum-testnet-sepolia-blast-1"
+    case "METIS_MAINNET":
+      return "ethereum-mainnet-andromeda-1"
+    case "METIS_SEPOLIA":
+      return "ethereum-testnet-sepolia-andromeda-1"
+    case "ZKSYNC_MAINNET":
+      return "ethereum-mainnet-zksync-1"
+    case "ZKSYNC_SEPOLIA":
+      return "ethereum-testnet-sepolia-zksync-1"
+    case "LINEA_MAINNET":
+      return "ethereum-mainnet-linea-1"
+    case "LINEA_SEPOLIA":
+      return "ethereum-testnet-sepolia-linea-1"
+    case "SCROLL_MAINNET":
+      return "ethereum-mainnet-scroll-1"
+    case "SCROLL_SEPOLIA":
+      return "ethereum-testnet-sepolia-scroll-1"
+    case "SONEIUM_MINATO":
+      return "ethereum-testnet-sepolia-soneium-1"
+    case "ETHEREUM_HOLESKY":
+      return "ethereum-testnet-holesky"
+    case "ASTAR_MAINNET":
+      return "polkadot-mainnet-astar"
+    case "ASTAR_SHIBUYA":
+      return "polkadot-testnet-astar-shibuya"
+    case "ZIRCUIT_TESTNET":
+      return "ethereum-testnet-sepolia-zircuit-1"
+    case "ZIRCUIT_MAINNET":
+      return "ethereum-mainnet-zircuit-1"
+    case "MANTLE_MAINNET":
+      return "ethereum-mainnet-mantle-1"
+    case "MANTLE_SEPOLIA":
+      return "ethereum-testnet-sepolia-mantle-1"
+    case "RONIN_MAINNET":
+      return "ronin-mainnet"
+    case "RONIN_SAIGON":
+      return "ronin-testnet-saigon"
+    case "BSQUARED_MAINNET":
+      return "bitcoin-mainnet-bsquared-1"
+    case "BSQUARED_TESTNET":
+      return "bitcoin-testnet-bsquared-1"
+    case "SHIBARIUM_MAINNET":
+      return "shibarium-mainnet"
+    case "SHIBARIUM_PUPPYNET":
+      return "shibarium-testnet-puppynet"
     default:
       throw Error(`Chain not found ${supportedChain}`)
   }

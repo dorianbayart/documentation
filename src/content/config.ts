@@ -7,6 +7,7 @@ enum Products {
   VRF = "vrf",
   FEEDS = "feeds",
   GENERAL = "general",
+  CHAINLINK_LOCAL = "chainlink-local",
 }
 
 export const productsInfo: Record<Products, { name: string; slug: string }> = {
@@ -16,6 +17,7 @@ export const productsInfo: Record<Products, { name: string; slug: string }> = {
   vrf: { name: "VRF", slug: "vrf" },
   feeds: { name: "Data Feeds", slug: "data-feeds" },
   general: { name: "General", slug: "/" },
+  "chainlink-local": { name: "Chainlink Local", slug: "chainlink-local" },
 }
 
 const productEnum = z.preprocess((val) => (val as string).toLowerCase(), z.nativeEnum(Products))
@@ -30,6 +32,7 @@ const sectionEnum = z.enum([
   "dataStreams",
   "legacy",
   "vrf",
+  "chainlinkLocal",
 ])
 
 export type Sections = z.infer<typeof sectionEnum>
@@ -40,6 +43,8 @@ const metadata = z
     description: z.string().optional(),
     image: z.string().optional(),
     linkToWallet: z.boolean().optional(),
+    canonical: z.string().optional(),
+    excerpt: z.string().optional(),
   })
   .optional()
 
@@ -52,7 +57,6 @@ const baseFrontmatter = z
     isMdx: z.boolean().optional(),
     isIndex: z.boolean().optional(),
     metadata,
-    excerpt: z.string().optional(),
     datafeedtype: z.string().optional(),
     fileExtension: z.string().optional(),
   })
@@ -62,6 +66,7 @@ const quickstartsFrontmatter = z
   .object({
     title: z.string(),
     description: z.string(),
+    githubSourceCodeUrl: z.string().optional(),
     image: z.string(),
     products: z.array(productEnum),
     time: z.string(),
@@ -104,4 +109,7 @@ export const collections = {
   resources: resourcesCollection,
   vrf: vrfCollection,
   ccip: ccipCollection,
+  "chainlink-local": baseCollection,
 }
+
+export type Collection = keyof typeof collections

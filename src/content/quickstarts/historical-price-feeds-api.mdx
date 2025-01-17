@@ -1,6 +1,7 @@
 ---
 title: "Historical Price Feeds API"
 description: "Deploy your own Historical Price Feeds API for retrieving data."
+githubSourceCodeUrl: "https://github.com/smartcontractkit/quickstarts-historical-prices-api"
 image: "QuickStarts-Historical-Price-Feed.webp"
 products: ["feeds"]
 time: "10 minutes"
@@ -143,7 +144,7 @@ The endpoint for this API is `GET /api/price`.
 | ✅       | contractAddress | The address of the Chainlink price feed contract.      | `string` | [Price Feeds](https://docs.chain.link/data-feeds/price-feeds/addresses)                                                                                      |
 | ✅       | startTimestamp  | The start timestamp of the period for fetching prices. | `number` | Unix timestamp in seconds. Example: `1681187628`                                                                                                             |
 | ✅       | endTimestamp    | The end timestamp of the period for fetching prices.   | `number` | Unix timestamp in seconds. Example: `1681187628`                                                                                                             |
-| ✅       | chain           | The blockchain network where the contract is deployed. | `string` | `mainnet`, `goerli`, `arbitrum`, `bsc`, `polygon` , `avalanche`, `fantom`, `moonbeam`, `moonriver`, `optimism`, `metis`, `baseGoerli`,`gnosis` |
+| ✅       | chain           | The blockchain network where the contract is deployed. | `string` | `mainnet`, `arbitrum`, `bsc`, `polygon` , `avalanche`, `fantom`, `moonbeam`, `moonriver`, `optimism`, `metis`, `gnosis` |
 |          | rpcUrl          | The RPC URL for the blockchain network.                | `string` | [RPC URLs](https://chainlist.org/)                                                                                                                           |
 
 ### Response
